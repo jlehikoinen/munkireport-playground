@@ -1,13 +1,19 @@
-# Docker - Python & MySQL playground
+# Docker: Python & MySQL playground
 
 Docker Python playground for testing ([MunkiReport](https://github.com/munkireport/munkireport-php)) MySQL queries.
 
-- Docker builds python:2.7 image with MySQL-python (1.2.5) module
-- Docker Compose is used for running MySQL containers
+* Docker builds python:2.7 image with MySQL-python (1.2.5) module
+* Docker Compose is used for running MySQL containers
 
-## Pre-requisites
+**Requirements**
 
-- Docker Toolbox
+* Docker Toolbox
+
+**Docker images @ Docker Hub**
+
+* [Ubuntu](https://hub.docker.com/_/ubuntu/) (for data container)
+* [MySQL](https://registry.hub.docker.com/_/mysql/)
+* [Python](https://hub.docker.com/_/python/)
 
 ## Preparations
 
@@ -51,21 +57,23 @@ Run MySQL containers:
 
 `$ docker-compose up -d`
 
-Import database. Copy sql dump file to $PWD and run a temp container:
+Import database. Copy sql dump file to $PWD, replace `<my-db>.sql` with your db name and run a temp container:
 
 `$ docker run -it --rm --link=mysqlplayground_mysql_1:mysql -v "$PWD":/tmp mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<my-db>.sql'`
 
-Run interactive Python container:
+Run interactive shell in Python container:
 
 `$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python bash`
 
 `# python example.py`
 
-Run example Python script directly:
+`# exit`
+
+Run example script directly:
 
 `$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python python example.py`
 
-## Running containers with separate docker commands
+## Run containers with separate docker commands
 
 `$ docker run -d -v /var/lib/mysql --name db_data ubuntu`
 
@@ -73,7 +81,7 @@ Run example Python script directly:
 
 `$ docker run -it --rm --link=db_app:mysql -v "$PWD":/tmp mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<my-db>.sql'`
 
-`$ docker run -it --rm -v "$PWD"/code:/code --link db_app:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python bash`
+`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link db_app:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python bash`
 
 ## After testing
 
