@@ -1,0 +1,18 @@
+data:
+  image: ubuntu:latest
+  volumes:
+    - /var/lib/mysql
+  command: "true"
+
+mysql:
+  restart: always
+  image: mysql:latest
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: munkireport
+    MYSQL_USER: admin
+    MYSQL_PASSWORD: admin
+  volumes_from:
+    - data
+  ports:
+    - "3306:3306"
