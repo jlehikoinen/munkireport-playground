@@ -1,8 +1,8 @@
 # Docker - Python & MySQL playground
 
-Docker Python playground for testing MySQL queries.
+Docker Python playground for testing ([MunkiReport](https://github.com/munkireport/munkireport-php)) MySQL queries.
 
-- Dockerfile builds python:2.7 image with MySQL-python (1.2.5)
+- Docker builds python:2.7 image with MySQL-python (1.2.5) module
 - Docker Compose is used for running MySQL containers
 
 ## Pre-requisites
