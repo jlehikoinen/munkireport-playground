@@ -1,5 +1,7 @@
 # Docker - Python & MySQL playground
 
+Docker Python playground for testing MySQL queries.
+
 - Dockerfile builds python:2.7 image with MySQL-python (1.2.5)
 - Docker Compose is used for running MySQL containers
 
@@ -51,7 +53,7 @@ Run MySQL containers:
 
 Import database. Copy sql dump file to $PWD and run a temp container:
 
-`$ docker run -it --rm --link=mysqlplayground_mysql_1:mysql -v "$PWD":/tmp/ mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<my-db>.sql'`
+`$ docker run -it --rm --link=mysqlplayground_mysql_1:mysql -v "$PWD":/tmp mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<my-db>.sql'`
 
 Run interactive Python container:
 
@@ -69,7 +71,7 @@ Run example Python script directly:
 
 `$ docker run -d --name db_app --volumes-from db_data -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=munkireport -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin mysql`
 
-`$ docker run -it --rm --link=db_app:mysql -v "$PWD":/tmp/ mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<munkireport-db>.sql'`
+`$ docker run -it --rm --link=db_app:mysql -v "$PWD":/tmp mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<my-db>.sql'`
 
 `$ docker run -it --rm -v "$PWD"/code:/code --link db_app:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python bash`
 
@@ -79,6 +81,6 @@ Stop and delete all containers:
 
 `$ docker stop $(docker ps -aq) && docker rm $(docker ps -aq)`
 
-Delete `my_python` image:
+Delete `my_python` image (optional):
 
 `$ docker rmi my_python`
