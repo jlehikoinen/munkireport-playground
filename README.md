@@ -45,7 +45,7 @@ Get this repo:
 
 Build `my_python` image with onbuild Python image (takes some time 1st time):
 
-`$ docker build -t my_python python_build`
+`$ docker build -t my_python build_python`
 
 List images:
 

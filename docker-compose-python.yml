@@ -19,7 +19,7 @@ mysql:
 
 python:
   restart: always
-  build: ./python_build
+  build: ./build_python
   working_dir: /code
   volumes:
     - ./code:/code
