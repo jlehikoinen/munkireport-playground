@@ -39,17 +39,25 @@ Build `my_python` image with onbuild Python image (takes some time 1st time):
 
 `$ docker build -t my_python python_build`
 
+List images:
+
+`$ docker images`
+
+## Run containers
+
 Run MySQL containers:
 
 `$ docker-compose up -d`
 
-Import database. Copy sql dump file to this folder and run a temp container:
+Import database. Copy sql dump file to $PWD and run a temp container:
 
 `$ docker run -it --rm --link=mysqlplayground_mysql_1:mysql -v "$PWD":/tmp/ mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<my-db>.sql'`
 
 Run interactive Python container:
 
 `$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python bash`
+
+`# python example.py`
 
 Run example Python script directly:
 
