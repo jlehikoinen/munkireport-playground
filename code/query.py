@@ -15,20 +15,16 @@ db = MySQLdb.connect(host_ip,"admin","admin","munkireport" )
 cursor = db.cursor()
 
 # execute SQL query using execute() method.
-# numrows = cursor.execute("SELECT * FROM machine")
-numrows = cursor.execute("SELECT machine_model FROM machine")
+numrows = cursor.execute("SELECT * FROM machine")
 
-# print "Selected %s rows" % numrows
 print "Selected %s rows" % cursor.rowcount
 
-# Date testing
-# numrows2 = cursor.execute("SELECT * FROM reportdata")
-# numrows2 = cursor.execute("SELECT FROM_UNIXTIME(timestamp, '%Y.%d.%m %h:%i:%s') from reportdata")
-numrows2 = cursor.execute("SELECT * FROM reportdata WHERE timestamp >= NOW() - INTERVAL 5 MONTH")
-print numrows2
-
-# data = cursor.fetchall ()
+query = cursor.execute("SELECT serial_number FROM machine")
+data = cursor.fetchall ()
 # print data
+
+for row in data:
+    print row[0]
 
 # disconnect from server
 db.close()
