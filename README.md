@@ -15,7 +15,7 @@ Docker Python playground for testing ([MunkiReport](https://github.com/munkirepo
 * [MySQL](https://registry.hub.docker.com/_/mysql/)
 * [Python](https://hub.docker.com/_/python/)
 
-## Preparations
+## Preparations (optional)
 
 Create separate local Docker Machine `dev` for testing:
 
@@ -24,16 +24,6 @@ Create separate local Docker Machine `dev` for testing:
 `$ eval "$(docker-machine env dev)"`
 
 `$ docker-machine ls`
-
-Deliver Docker Machine (`dev`) IP address to container via environment variable:
-
-`$ export DOCKER_MACHINE_IP=$(docker-machine ip dev)`
-
-This host IP address will be used in the examples:
-
-```
-192.168.99.100
-```
 
 ## Setup
 
@@ -59,11 +49,22 @@ Run MySQL containers:
 
 Import database. Copy sql dump file to $PWD, replace `<my-db>.sql` with your db name and run a temp container:
 
-`$ docker run -it --rm --link=mysqlplayground_mysql_1:mysql -v "$PWD":/tmp mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<my-db>.sql'`
+```
+$ docker run --rm \
+		   --link=mysqlplayground_mysql_1:mysql \
+		   -v "$PWD":/tmp mysql \
+		   sh -c 'exec mysql \
+		   -h"$MYSQL_PORT_3306_TCP_ADDR" \
+		   -P"$MYSQL_PORT_3306_TCP_PORT" \
+		   -uroot \
+		   -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD" \
+		   "$MYSQL_ENV_MYSQL_DATABASE" \
+		   < /tmp/<my-db>.sql'
+```
 
 Run interactive shell in Python container:
 
-`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python bash`
+`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql my_python bash`
 
 `# python example.py`
 
@@ -71,7 +72,7 @@ Run interactive shell in Python container:
 
 Run example script directly:
 
-`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python python example.py`
+`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql my_python python example.py`
 
 ## Run containers with separate docker commands
 
@@ -79,9 +80,9 @@ Run example script directly:
 
 `$ docker run -d --name db_app --volumes-from db_data -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=munkireport -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin mysql`
 
-`$ docker run -it --rm --link=db_app:mysql -v "$PWD":/tmp mysql sh -c 'exec mysql -h192.168.99.100 -P3306 -uroot -proot munkireport < /tmp/<my-db>.sql'`
+`$ docker run -it --rm --link=db_app:mysql -v "$PWD":/tmp mysql sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD" "$MYSQL_ENV_MYSQL_DATABASE" < /tmp/<my-db>.sql'`
 
-`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link db_app:mysql -e HOST_IP=$DOCKER_MACHINE_IP my_python bash`
+`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link db_app:mysql my_python bash`
 
 ## After testing
 

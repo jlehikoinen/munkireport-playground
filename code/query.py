@@ -1,15 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# MunkiReport example query script
+
 import os
 
 import MySQLdb
 
-# Docker machine IP
-host_ip = os.environ["HOST_IP"]
+# Environment variables
+host_ip = os.environ["MYSQL_PORT_3306_TCP_ADDR"]
+db_user = os.environ["MYSQL_ENV_MYSQL_USER"]
+db_passwd = os.environ["MYSQL_ENV_MYSQL_PASSWORD"]
+db_name = os.environ["MYSQL_ENV_MYSQL_DATABASE"]
 
 # Open database connection
-db = MySQLdb.connect(host_ip,"admin","admin","munkireport" )
+db = MySQLdb.connect(host_ip, db_user, db_passwd, db_name)
 
 # prepare a cursor object using cursor() method
 cursor = db.cursor()
