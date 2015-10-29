@@ -24,7 +24,7 @@ import_db:
   working_dir: /code
   command: sh import_db.sh
   environment:
-    - IMPORT_DATABASE=mr.sql
+    - IMPORT_DATABASE=db.sql
   volumes:
     - ./code:/code
     - .:/tmp
