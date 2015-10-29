@@ -17,12 +17,14 @@ mysql:
   ports:
     - "3306:3306"
 
-python:
-  restart: always
-  build: ./build_python
+import_db:
+  image: mysql:latest
+  links:
+    - mysql
   working_dir: /code
+  command: sh import_db.sh
+  environment:
+    - IMPORT_DATABASE=mr.sql
   volumes:
     - ./code:/code
-  links:
-    - mysql:mysql
-  command: "true"
+    - .:/tmp
