@@ -39,15 +39,15 @@ Get this repo:
 
 ## Run containers (3 different options)
 
-1. Run MySQL and MunkiReport containers:
+Run MySQL and MunkiReport containers:
 
 `$ docker-compose up -d`
 
-2. Run MySQL containers and import MySQL database. Before running this option, rename your database dump to `db.sql` and place it  the root of working dir:
+Run MySQL containers and import MySQL database. Before running this option, rename your database dump to `db.sql` and place it  to the root of working dir:
 
 `$ docker-compose -f docker-compose-import.yml up -d`
 
-3. Run MySQL & MunkiReport containers and import MySQL database:
+Run MySQL & MunkiReport containers and import MySQL database:
 
 `$ docker-compose -f docker-compose-all.yml up -d`
 
