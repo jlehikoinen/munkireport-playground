@@ -17,6 +17,18 @@ mysql:
   ports:
     - "3306:3306"
 
+import_db:
+  image: mysql:latest
+  links:
+    - mysql
+  working_dir: /code
+  command: sh import_db.sh
+  environment:
+    - IMPORT_DATABASE=db.sql
+  volumes:
+    - ./code:/code
+    - .:/tmp
+
 mr:
   restart: always
   image: hunty1/munkireport-docker
