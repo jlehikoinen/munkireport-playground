@@ -1,7 +1,7 @@
 # Docker: MunkiReport playground
 
-* Use Docker Compose for running MySQL and [MunkiReport](https://github.com/munkireport/munkireport-php) containers and importing MySQL database
-* Use Docker for building python:2.7 image with MySQL-python (1.2.5) module
+* Docker Compose example of running MySQL and [MunkiReport](https://github.com/munkireport/munkireport-php) containers and importing MySQL database
+* Docker for building python:2.7 image with MySQL-python (1.2.5) module
 
 **Requirements**
 
@@ -25,10 +25,6 @@ Start local `default` Docker Machine:
 
 `$ docker-machine ls`
 
-Save Docker Machine IP address to environment variable:
-
-`$ export DOCKER_MACHINE_IP=$(docker-machine ip default)`
-
 ## Setup
 
 Get this repo:
@@ -51,6 +47,8 @@ Password: `root`
 
 ## Run containers (3 different options)
 
+First check yaml file contents and edit them if needed.
+
 Run MySQL and MunkiReport containers:
 
 `$ docker-compose up -d`
@@ -62,6 +60,10 @@ Run MySQL containers and import MySQL database. Before running this option, rena
 Run MySQL & MunkiReport containers and import MySQL database:
 
 `$ docker-compose -f docker-compose-all.yml up -d`
+
+Open MunkiReport GUI:
+
+`$ open http://$(docker-machine ip default)`
 
 ## Custom configurations
 
@@ -81,7 +83,7 @@ Run Docker Compose again which mounts `munkireport` host folder as a data volume
 
 Edit files in your local `munkireport` folder.
 
-Refresh MunkiReport web GUI and login again: http://192.168.99.100/
+Refresh MunkiReport web GUI and login again.
 
 ## Build Python with MySQL-python module
 
@@ -121,11 +123,11 @@ Import MySQL database. Copy sql dump file to $PWD, replace `<my-db>.sql` with yo
 
 Run MunkiReport `mr` container and connect it to `db_app` container:
 
-`$ docker run -d -p 80:80 --name mr --link db_app:mysql -e DB_NAME=munkireport -e DB_USER=admin -e DB_PASS=admin -e DB_SERVER=$DOCKER_MACHINE_IP -e MR_SITENAME="Local tests" hunty1/munkireport-docker`
+`$ docker run -d -p 80:80 --name mr --link db_app:mysql -e DB_NAME=munkireport -e DB_USER=admin -e DB_PASS=admin -e DB_SERVER=db_app -e MR_SITENAME="Local tests" hunty1/munkireport-docker`
 
 Run MunkiReport container and mount host folder `munkireport` as a data volume:
 
-`$ docker run -d -p 80:80 --name mr --link db_app:mysql -v "$PWD"/munkireport:/www/munkireport -e DB_NAME=munkireport -e DB_USER=admin -e DB_PASS=admin -e DB_SERVER=$DOCKER_MACHINE_IP -e MR_SITENAME="Local tests" hunty1/munkireport-docker`
+`$ docker run -d -p 80:80 --name mr --link db_app:mysql -v "$PWD"/munkireport:/www/munkireport -e DB_NAME=munkireport -e DB_USER=admin -e DB_PASS=admin -e DB_SERVER=db_app -e MR_SITENAME="Local tests" hunty1/munkireport-docker`
 
 Run interactive Python container:
 

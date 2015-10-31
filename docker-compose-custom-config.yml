@@ -25,10 +25,9 @@ mr:
     DB_NAME: munkireport
     DB_USER: admin
     DB_PASS: admin
-    DB_SERVER: ${DOCKER_MACHINE_IP}
-    # Not possible yet with docker-compose?
-    # DB_SERVER: ${MYSQL_PORT_3306_TCP_ADDR}
+    DB_SERVER: mysql
     MR_SITENAME: "Local tests"
+    MR_TIMEZONE: "Europe/Helsinki"
   links:
     - mysql
   volumes:
