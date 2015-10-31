@@ -15,19 +15,19 @@
 * [Python](https://hub.docker.com/_/python/)
 * [MunkiReport](https://registry.hub.docker.com/u/hunty1/munkireport-docker/)
 
-## Preparations (optional)
+## Preparations
 
-Create separate local Docker Machine `dev` for testing:
+Start local `default` Docker Machine:
 
-`$ docker-machine create -d virtualbox dev`
+`$ docker-machine start default`
 
-`$ eval "$(docker-machine env dev)"`
+`$ eval "$(docker-machine env default)"`
 
 `$ docker-machine ls`
 
 Save Docker Machine IP address to environment variable:
 
-`$ export DOCKER_MACHINE_IP=$(docker-machine ip dev)`
+`$ export DOCKER_MACHINE_IP=$(docker-machine ip default)`
 
 ## Setup
 
@@ -36,6 +36,18 @@ Get this repo:
 `$ git clone git@github.com:jlehikoinen/munkireport-playground.git`
 
 `$ cd munkireport-playground`
+
+## Additional information
+
+Get Docker Machine `default` IP address:
+
+`$ docker-machine ip default`
+
+MunkiReport GUI credentials:
+
+Username: `root`
+
+Password: `root`
 
 ## Run containers (3 different options)
 
@@ -51,6 +63,26 @@ Run MySQL & MunkiReport containers and import MySQL database:
 
 `$ docker-compose -f docker-compose-all.yml up -d`
 
+## Custom configurations
+
+Copy the `munkireport` folder from MunkiReport container to the root of working dir:
+
+`$ docker cp munkireportplayground_mr_1:/www/munkireport .`
+
+Stop & delete current MunkiReport container:
+
+`$ docker stop munkireportplayground_mr_1`
+
+`$ docker rm -f munkireportplayground_mr_1`
+
+Run Docker Compose again which mounts `munkireport` host folder as a data volume:
+
+`$ docker-compose -f docker-compose-custom-config.yml up -d`
+
+Edit files in your local `munkireport` folder.
+
+Refresh MunkiReport web GUI and login again: http://192.168.99.100/
+
 ## Build Python with MySQL-python module
 
 Build `my_python` image with onbuild Python image (takes some time 1st time):
@@ -63,7 +95,7 @@ List images:
 
 Run interactive shell in Python container:
 
-`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql my_python bash`
+`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link munkireportplayground_mysql_1:mysql my_python bash`
 
 `# python example.py`
 
@@ -71,7 +103,7 @@ Run interactive shell in Python container:
 
 Run example script directly:
 
-`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link mysqlplayground_mysql_1:mysql my_python python example.py`
+`$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link munkireportplayground_mysql_1:mysql my_python python example.py`
 
 ## Run containers with separate docker commands
 
@@ -91,6 +123,10 @@ Run MunkiReport `mr` container and connect it to `db_app` container:
 
 `$ docker run -d -p 80:80 --name mr --link db_app:mysql -e DB_NAME=munkireport -e DB_USER=admin -e DB_PASS=admin -e DB_SERVER=$DOCKER_MACHINE_IP -e MR_SITENAME="Local tests" hunty1/munkireport-docker`
 
+Run MunkiReport container and mount host folder `munkireport` as a data volume:
+
+`$ docker run -d -p 80:80 --name mr --link db_app:mysql -v "$PWD"/munkireport:/www/munkireport -e DB_NAME=munkireport -e DB_USER=admin -e DB_PASS=admin -e DB_SERVER=$DOCKER_MACHINE_IP -e MR_SITENAME="Local tests" hunty1/munkireport-docker`
+
 Run interactive Python container:
 
 `$ docker run -it --rm -v "$PWD"/code:/usr/src/app --link db_app:mysql my_python bash`
@@ -101,6 +137,6 @@ Stop and delete all containers:
 
 `$ docker stop $(docker ps -aq) && docker rm $(docker ps -aq)`
 
-Stop Docker Machine `dev`:
+Stop Docker Machine `default`:
 
-`$ docker-machine stop dev`
+`$ docker-machine stop default`
