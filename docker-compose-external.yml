@@ -1,0 +1,36 @@
+data:
+  image: ubuntu:latest
+  volumes:
+    - /var/lib/mysql
+  command: "true"
+
+mysql:
+  restart: always
+  image: mysql:latest
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: munkireport
+    MYSQL_USER: admin
+    MYSQL_PASSWORD: admin
+  volumes_from:
+    - data
+  ports:
+    - "3306:3306"
+
+mr_ext:
+  restart: always
+  image: hunty1/munkireport-docker
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    DB_NAME: munkireport
+    DB_USER: admin
+    DB_PASS: admin
+    DB_SERVER: mysql
+    MR_SITENAME: "Local tests"
+    MR_TIMEZONE: "Europe/Helsinki"
+  links:
+    - mysql
+  volumes:
+    - ./munkireport:/www/munkireport
+  ports:
+    - "80:80"
