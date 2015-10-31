@@ -6,7 +6,6 @@
 **Requirements**
 
 * Docker Toolbox (OS X)
-* Docker Compose 1.5.0rc1 (should be included in the Toolbox in the future)
 
 **Docker images @ Docker Hub**
 
