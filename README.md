@@ -28,7 +28,7 @@ Start local `default` Docker Machine:
 
 Get this repo:
 
-`$ git clone git@github.com:jlehikoinen/munkireport-playground.git`
+`$ git clone https://github.com/jlehikoinen/munkireport-playground.git`
 
 `$ cd munkireport-playground`
 
